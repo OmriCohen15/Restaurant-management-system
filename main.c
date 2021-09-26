@@ -7,6 +7,7 @@ void main() {
 	FILE* instruc,*manot, *out;
 	char ProductName[51];
 	ManotHead.head = NULL;
+	/*Open files*/
 	instruc = fopen("Instructions.txt", "r");
 	if (instruc == NULL)
 		exit(1);
@@ -20,20 +21,20 @@ void main() {
 	if (size_of_Tables > 0) {
 		arr = (PTables)malloc(size_of_Tables * sizeof(Tables));
 		if (arr == NULL)
-			fprintf(out, "Allocation to Tables Arr");
+			fprintf(out, "Allocation to Tables Arr failed");
 		for (i = 0; i < size_of_Tables; i++) { //Initialize Tables arr - struct manger
 			arr[i].head = NULL;
 			arr[i].bill = 0;
 		}
 	}
-	fscanf(instruc, "%d", &choise); //getting '1' digit to call CreateProducts function
+	fscanf(instruc, "%d", &choise); /*getting '1' digit to call CreateProducts function*/
 	if (CreateProducts(&ManotHead, manot, out) == 0) {
 		fprintf(out, "Couldn't create manot list");
 		free(arr);
 	}
 	else {
 		fprintf(out, "The kitchen was created");
-		while (fscanf(instruc, "%d", &choise) != -1) {
+		while (fscanf(instruc, "%d", &choise) != -1) { /*As long as the file commands are read, the loop will continue*/
 			switch (choise)
 			{
 			case 2:
