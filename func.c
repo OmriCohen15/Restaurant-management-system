@@ -1,5 +1,5 @@
 #include "header.h"
-/*The function gets pointer to head of Manot list and frees of the string allocated for the name of every Mana and the allocated memory for the each Mana itself*/
+/*The function gets pointer to head of Manot list and frees of the string allocated for the name of every Mana and the allocated memory for each Mana itself*/
 void free_Manot(PMana list_head) {
 	PMana temp;
 	temp = list_head;
@@ -17,26 +17,26 @@ int CreateProducts(PManot list, FILE* in, FILE* out) {
 	PMana mana;
 	char name[51];
 	int Price, Quantity, success = 0;
-	while ((fscanf(in, "%s", name)) != -1) {
+	while ((fscanf(in, "%s", name)) != -1) { /*The loop run as long is read from the file*/
 		fscanf(in, "%d %d", &Quantity, &Price);
 		if ((Price < 0) || (Quantity < 0)) {
 			fprintf(out, "\nprice/quantity of manot is negative, can't allocate memory to this mana, moving foward");
 		}
 		else {
-			mana = (PMana)malloc(1 * sizeof(Mana));
+			mana = (PMana)malloc(1 * sizeof(Mana)); /*Allocation memory for mana*/
 			if (mana == NULL) {
 				fprintf(out, "\nNode Allocation error");
 				success = 0;
 				free_Manot(list->head);
 			}
 			else {
-				mana->ProductName = (char*)malloc((strlen(name) + 1) * sizeof(char));
+				mana->ProductName = (char*)malloc((strlen(name) + 1) * sizeof(char)); /*Allocation memory for mana name*/
 				if (mana->ProductName != NULL) {
 					strcpy(mana->ProductName, name);
 					mana->Price = Price;
 					mana->Quantity = Quantity;
-					mana->next = list->head;
-					list->head = mana;
+					mana->next = list->head; /*make the head of the list, the second*/
+					list->head = mana; /*make the new mana to be the head of the list*/
 					success = 1;
 				}
 				else {
@@ -48,7 +48,7 @@ int CreateProducts(PManot list, FILE* in, FILE* out) {
 			}
 		}
 	}
-	return success;
+	return success; 
 }
 
 /*The function adds requested value to the quantity of the available Manot in stock.
@@ -58,8 +58,8 @@ void AddItems(char* ProductName, int Quantity, Manot list, FILE* out ) {
 	PMana temp;
 	int success = 0;
 	temp = list.head;
-	while (temp != NULL && success == 0) {
-		if (strcmp(temp->ProductName, ProductName) == 0)
+	while (temp != NULL && success == 0) { /*The loop searches for the name of the desired mana in the list*/
+		if (strcmp(temp->ProductName, ProductName) == 0) 
 			if (Quantity > 0) {
 				temp->Quantity += Quantity;
 				success = 1;
@@ -85,7 +85,7 @@ void OrderItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, M
 	while (temp != NULL && success == 0) {
 		if (strcmp(temp->ProductName, ProductName) == 0)
 			if (Quantity > 0 && Quantity <= temp->Quantity) {
-				if (arr[TableNumber - 1].head == NULL) {
+				if (arr[TableNumber - 1].head == NULL) { /*Check if the table has not yet ordered anything*/
 					arr[TableNumber - 1].head = (PTableNode)malloc(1*sizeof(TableNode));
 					if (arr[TableNumber - 1].head == NULL)
 						fprintf(out, "\nTableNODE allocation error");
@@ -106,7 +106,7 @@ void OrderItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, M
 						}
 					}
 				}
-				else {
+				else { /*If the table has already ordered dishes*/
 					Tnode = arr[TableNumber - 1].head;
 					while ((success == 0) && Tnode->next != NULL) {
 						if (strcmp(Tnode->mana_name, ProductName) == 0) {
@@ -118,7 +118,7 @@ void OrderItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, M
 						}
 					Tnode = Tnode->next;
 					}
-					if (success == 0) { //If Tnode is pointing on the last node
+					if (success == 0) { /*Extreme case:  If Tnode is pointing on the last node*/
 						if (strcmp(Tnode->mana_name, ProductName) == 0) {
 							temp->Quantity -= Quantity;
 							Tnode->ordered += Quantity;
@@ -151,9 +151,10 @@ void OrderItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, M
 			temp = temp->next;
 	}
 	if (success == 0) //in case that there is no such name of mana inside the list of manot
-		fprintf(out, "\nWe don’t have %s, sorry!", ProductName);
+		fprintf(out, "\nWe donâ€™t have %s, sorry!", ProductName);
 }
 
+/*The function allows the table to cancel a dish that has already been ordered*/
 void RemoveItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, Manot manot, FILE* out) {
 	PMana check = manot.head;
 	PTableNode table_mana_check = arr[TableNumber - 1].head;
@@ -198,6 +199,7 @@ void RemoveItem(Tables arr[], int TableNumber, char* ProductName, int Quantity, 
 		fprintf(out, "\nTable number %d has no manot to return", TableNumber);
 }
 
+/*The function allows the table to end the meal and get the bill*/
 void RemoveTable(PTables table, int TableNumber, FILE* out) {
 	PTableNode temp = table->head;
 	double tip;
