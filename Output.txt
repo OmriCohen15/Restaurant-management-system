@@ -1,6 +1,6 @@
 The kitchen was created
 4 Pasta were added to the kitchen
-We don’t have Falafel, sorry!
+We donâ€™t have Falafel, sorry!
 4 Pasta were added to the table number 5!
 1 Pasta was returned to the kitchen from table number 5
 The table number 1 is not ordered yet
